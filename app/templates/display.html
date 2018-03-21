@@ -1,0 +1,657 @@
+<html>
+  <head>
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{{image_name}}</title>
+      <style type="text/css">
+body{
+margin:0;
+overflow:hidden;
+}
+
+div#view {
+    position: absolute;
+    width: 100%;
+    height:100%;
+    background-color: black;
+    color: white;
+}
+div#view.fullpage {
+    left: 0%;
+    border: 0;
+}
+
+p{
+margin: 0 0 10px;
+}
+
+.anotationWindow textarea{
+width:90%;
+margin-left:5%;
+bolder:1px solid #ccc;
+line-height:30px;
+font-size:14px;
+padding:0 2px;
+box-sizing:border-box;
+height:80px;
+}
+
+.anotationWindow input[type=text]{
+width:90%;
+margin-left:5%;
+border:1px solid #ccc;
+height:30px;
+line-height:30px;
+font-size:14px;
+padding:0 2px;
+box-sizing:border-box;
+-webkit-appearance:textfield;
+}
+
+.anotationWindow p{
+font-size:14px;
+color:#666;
+margin-left:5%;
+padding-top:5px;
+line-height:20px;
+height:20px;
+}
+
+.anotationWindow .winTitle{
+margin-left:0;
+width:100%;
+text-align:center;
+font-size:16px;
+line-height:36px;
+height:36px;
+background-color:#6196f3;
+color:#fff;
+padding-top:0;
+cursor:move;
+border-radius:5px 5px 0 0;
+}
+
+.anotationWindow{
+position:absolute;
+top:15%;
+left:50%;
+z-index:400;
+margin-left:-180px;
+width:360px;
+height:350px;
+background-color:#fff;
+border:1px solid #334c6b;
+border-radius:5px;
+}
+
+.anotationWindow .typeSelect{
+position:absolute;
+top:-5px;
+left:50%;
+z-index:410;
+margin-left:-300px;
+width:600px;
+height:340px;
+background-color:#fff;
+color:#fff;
+border:1px solid #334c6b;
+border-radius:5px;
+}
+
+.anotationWindow .addAnotation,
+.anotationWindow .cancelAnotation,
+.anotationWindow .confirmType{
+padding:0;
+width:100px;
+background-color:#6196f3;
+color:#fff;
+margin-left:53px;
+border:none;
+margin-top:20px;
+cursor:pointer;
+border-radius:5px;
+}
+
+.anotationWindowBG{
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.2);
+            display: none;
+        }
+
+.detection{
+position:absolute;
+bottom:2px;
+left:2px;
+width:72px;
+height:30px;
+padding:5px 4px;
+background-color:#fff;
+border:1px solid #334c6b;
+font-size:14px;
+color:#333;
+line-height:20px;
+box-shadow:1px 1px 3px #999;
+z-index:399;
+}
+
+.resultImg{
+position:absolute;
+bottom:30px;
+left:30px;
+width:200px;
+height:200px;
+padding:5px 4px;
+background-color:#fff;
+border:1px solid #334c6b;
+font-size:14px;
+color:#333;
+line-height:20px;
+box-shadow:1px 1px 3px #999;
+z-index:399;
+display: none;
+}
+
+
+.anotationInfo{
+position:absolute;
+top:2px;
+right:2px;
+width:220px;
+min-height:40px;
+padding:5px 4px;
+background-color:#fff;
+border:1px solid #334c6b;
+font-size:14px;
+color:#333;
+line-height:20px;
+box-shadow:1px 1px 3px #999;
+z-index:399;
+}
+
+.anotationInfo .annoTitle{
+font-weight:700;
+}
+.anotationInfo p{
+padding-bottom:4px;
+}
+
+.anotationInfo input:enabled
+{
+background:#accedf;
+}
+.anotationInfo input:disabled
+{
+background:#dddddd;
+}
+
+.anotationInfo input{
+color:#334c6b;
+margin-right:30px;
+width:60px;
+border:none;
+margin-top:5px;
+cursor:pointer;
+float:right;
+height:24px;
+line-height:24px;
+font-size:13px;
+}
+
+.typeTable .subType{
+		margin-left:25px;
+	}
+	.typeTable .sub_subType{
+		margin-left:50px;
+	}
+	.typeTable{
+		font-size:12px;
+	}
+	.typeTable span{
+		font-weight:700;
+	}
+.typeTable tr{
+margin-left:15px;
+}
+</style>
+  </head>
+  <body>
+    <div class = "main">
+
+      <div id="view">
+    <div class="anotationInfo" style="display:none;" >
+    <p class="annoTitle"></p>
+    <p class="annoContent"></p>
+    <p class="annoTypes"></p>
+        <p class="createdBy"></p>
+        <p class="lastModifiedBy"></p>
+    <input value="关闭" type="button" class="cancelAct">
+    <input value="删除" type="button" class="deleteAno">
+</div>
+          <button class="detection">detection</button>
+          <img class="resultImg">
+</div>
+
+      <div class="anotationWindowBG">
+<div class="anotationWindow">
+    <p class="winTitle">添加标注</p>
+    <p>标题</p>
+    <input type="text" id="aTitle" maxlength="20" placeholder="请输入20字以内标注标题">
+    <p>内容</p>
+    <textarea id="aContent" rows="2" maxlength="50" placeholder="请输入50字以内标注内容"></textarea>
+    <p>病变类型</p>
+    <input type="text" id="knowledgeText" name="knowledgeText" class="form-control" value=""
+       placeholder=""/>
+<div id="hideDiv" class="typeSelect" style="display: none;">
+<table class="typeTable" style="margin-left:15px;">
+    <caption style="font-weight:700; font-size:16px;">请选择病灶类型:</caption>
+<tr>
+  <td> <input type="checkbox" class="not-subType" name="tumoTypeCheckBox"
+				value="SuspectedObject" >疑似病变</td>
+	<td> <span class="not-subType" >癌</span></td>
+    <td> <span class="not-subType" >神经内分泌肿瘤</span></td>
+</tr>
+<tr>
+  <td> <input type="checkbox" class="no-subType" name="tumoTypeCheckBox"
+				value="Uncertain" >不确定的病变</td>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="papillary_adenoma" >乳头状腺癌</td>
+  <td> <span class="subType" >神经内分泌瘤 NET</span></td>
+</tr>
+	<tr>
+  <td> <span class="not-subType" >腺瘤</span></td>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="tubular_adenoma" >管状腺癌</td>
+  <td> <input type="checkbox" class="sub_subType" name="tumoTypeCheckBox"
+				value="NET1" >NET1级（类癌）</td>
+</tr>
+	<tr>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="LGIEN" >低级别上皮内瘤变</td>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="mucinous_adenoma" >粘液腺癌</td>
+  <td> <input type="checkbox" class="sub_subType" name="tumoTypeCheckBox"
+				value="NET2" >NET2级</td>
+</tr>
+	<tr>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="HGIEN" >高级别上皮内瘤变</td>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="low_adhesion_adenoma" >低粘附性癌</td>
+  <td> <span class="subType" >神经内分泌瘤 NEC</span></td>
+</tr>
+	<tr>
+  <td> <input type="checkbox" class="no-subType" name="tumoTypeCheckBox"
+				value="NO_GEIEN" >无上皮内瘤变</td>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="mixed_adenoma" >混合性腺癌</td>
+  <td> <input type="checkbox" class="sub_subType" name="tumoTypeCheckBox"
+				value="NEC_big_cell" >大细胞NEC</td>
+</tr>
+	<tr>
+  <td> <input type="checkbox" class="no-subType" name="tumoTypeCheckBox"
+				value="Uncertain_GEIEN" >不确定的上皮内瘤变</td>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="adenosquamous_carcinoma" >腺鳞癌</td>
+  <td> <input type="checkbox" class="sub_subType" name="tumoTypeCheckBox"
+				value="NEC_small_cell" >小细胞NEC</td>
+</tr>
+	<tr>
+  <td> <span class="not-subType" >上皮内瘤变</span></td>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="medullary_carcinoma" >伴有淋巴样间质的癌(髓样癌)</td>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="MIX_NET" >混合性腺神经内分泌癌</td>
+</tr>
+	<tr>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="PRE_LGIEN" >低级别上皮内瘤变</td>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="hepatoid_adenocarcinoma" >肝样腺癌</td>
+  <td> </td>
+</tr>
+	<tr>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="PRE_HGIEN" >高级别上皮内瘤变</td>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="squamous-cell_carcinoma" >鳞状细胞癌</td>
+  <td></td>
+</tr>
+	<tr>
+  <td> </td>
+  <td> <input type="checkbox" class="subType" name="tumoTypeCheckBox"
+				value="undifferentiated_carcinoma" >未分化癌</td>
+  <td></td>
+</tr>
+</table>
+    <button style="margin-left:260px;" class="confirmType" type="button" id="confirmTypes">
+        确定
+    </button>
+</div>
+    <input value="保存" type="button" class="addAnotation">
+    <input value="取消" type="button" class="cancelAnotation">
+</div>
+</div>
+
+
+<script type="text/javascript" src="static/jquery.js"></script>
+<script type="text/javascript" src="static/openseadragon.js"></script>
+<script type="text/javascript" src="static/openseadragon-scalebar.js"></script>
+<script type="text/javascript" src="static/openseadragon-annotations.js"></script>
+<script type="text/javascript" src= "https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<script type="text/javascript">
+
+
+$(document).ready(function() {
+
+    const imgID = '{{image_name}}';
+    const userName = '{{user.username}}' + '%-%' + Math.floor(Math.random()*1000000000);
+    console.log(`username: ${userName}, imageID: ${imgID}`);
+    var socket = io.connect('ws://172.18.31.162:8082');
+    socket.emit('login', {user:userName});
+    
+
+    $('.detection').click(function() {
+        socket.emit('detection_req', {imageID:imgID});
+    });
+
+    socket.on('detection_res', res=>{
+        //$('#test').html(`receive data: ${res.data} detection result. count: ${detection_count++}`);
+        if (res.imageID != imgID) {
+            console.log(`response image ID: ${res.imageID} is not the same with page image ID: ${imgID}`)
+            return;
+        }
+
+        var data = {'imageid':imgID,
+                    'username': '{{user.username}}',
+                    'detectionType':'classical'};
+
+        $.ajax({
+                type: 'POST',
+                url: "/detection",
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=UTF-8',
+                success: function(msg) {
+                    if(msg != 'detecting')
+                    {
+                        getDetectionResult();
+
+                    }else{
+                        oTimer = setInterval("getDetectionResult()",10000);
+                        $(".detection").attr('value',"Detecting");
+                        $(".detection").css('color','green');
+                    }
+
+                },
+                error: function(xhr, type) {
+                }
+        });
+    });
+    
+
+    
+    
+    
+    var dzi_data = {{ dzi_data|default('{}')|safe }};
+    var viewer = new OpenSeadragon({
+        id: "view",
+        prefixUrl: "static/images/",
+        timeout: 120000,
+        animationTime: 0.5,
+        blendTime: 0.1,
+        constrainDuringPan: true,
+        maxZoomPixelRatio: 2,
+        minZoomLevel: 1,
+        visibilityRatio: 1,
+        zoomPerScroll: 2,
+        debugMode: false,
+        showNavigator:  true,
+        navigatorPosition: "ABSOLUTE",
+        navigatorTop:      "60px",
+        navigatorLeft:     "50px",
+        navigatorHeight:   "120px",
+        navigatorWidth:    "145px"
+    });
+
+    viewer.addHandler("open", function() {
+        // To improve load times, ignore the lowest-resolution Deep Zoom
+        // levels.  This is a hack: we can't configure the minLevel via
+        // OpenSeadragon configuration options when the viewer is created
+        // from DZI XML.
+        viewer.source.minLevel = 4;
+    });
+    viewer.scalebar({
+        xOffset: 10,
+        yOffset: 10,
+        barThickness: 3,
+        color: '#555555',
+        fontColor: '#333333',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    });
+
+
+    viewer.initializeAnnotations(initial_annotations);
+
+    function open_slide(url, mpp) {
+        var tile_source;
+        if (dzi_data[url]) {
+            // DZI XML provided as template argument (deepzoom_tile.py)
+            tile_source = new OpenSeadragon.DziTileSource(
+                    OpenSeadragon.DziTileSource.prototype.configure(
+                    OpenSeadragon.parseXml(dzi_data[url]), url));
+        } else {
+            // DZI XML fetched from server (deepzoom_server.py)
+            tile_source = url;
+        }
+        viewer.open(tile_source);
+        viewer.scalebar({
+            pixelsPerMeter: mpp ? (1e6 / mpp) : 0,
+        });
+    }
+
+    open_slide("{{ slide_url }}", parseFloat('{{ slide_mpp }}'));
+    console.log('after openslide')
+
+    function save_annotations(annotationinfo,operation){
+        var data = {'imageid':'{{image_name}}',
+                    'username': '{{user.username}}',
+                    'annotations': annotationinfo,
+                    'operation':operation,
+                    'imagesize':{{imagesize}}};
+
+        $.ajax({
+                type: 'POST',
+                url: "/saveannotations",
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=UTF-8',
+                success: function(msg) {
+                var infolist = msg.split('|');
+                if(infolist.length > 1 && infolist[0] == 'add')
+                {
+                    viewer.HandleAnnotation({type:"updateLastAnnoId",id: parseInt(infolist[1])});
+                }
+                },
+                error: function(xhr, type) {
+                }
+        });
+    }
+
+    function popUpAnotationWindow(){
+    $(".anotationWindowBG").show();
+    };
+
+   selectTypes = [];
+   selectTypesDes = [];
+   $(".addAnotation").click(function (){
+       viewer.HandleAnnotation({type:"addAnnoInfo",
+       title:$("#aTitle").val(),
+       content:$("#aContent").val(),
+       typesDes:selectTypesDes,
+       types:selectTypes});
+       $(".anotationWindowBG").hide();
+       selectTypes = [];
+       selectTypesDes = [];
+       $("#knowledgeText").val("");
+       $("#aTitle").val("");
+       $("#aContent").val("");
+       clearTypeSelected();
+   });
+
+   $(".cancelAnotation").click(function (){
+   viewer.HandleAnnotation({type:"deleteLastAnno"});
+       $(".anotationWindowBG").hide();
+       selectTypes = [];
+       selectTypesDes = [];
+       $("#knowledgeText").val("");
+       $("#aTitle").val("");
+       $("#aContent").val("");
+       clearTypeSelected();
+   });
+
+   $("#knowledgeText").click(function(){
+
+   $('#hideDiv').show();
+   });
+
+function clearTypeSelected()
+{
+var checkboxStr=document.getElementsByName("tumoTypeCheckBox");
+       for(var i=0; i<checkboxStr.length; i++){
+        if(checkboxStr[i].checked){
+        checkboxStr[i].checked = false;
+        }
+        }
+}
+
+$("#confirmTypes").click(function(){
+       selectTypes = [];
+       selectTypesDes = [];
+       var checkboxStr=document.getElementsByName("tumoTypeCheckBox");
+       for(var i=0; i<checkboxStr.length; i++){
+        if(checkboxStr[i].checked){
+            selectTypes.push(checkboxStr[i].value);
+            selectTypesDes.push(checkboxStr[i].nextSibling.nodeValue);
+         }
+        }
+        $("#knowledgeText").val( selectTypesDes.join(";"));
+        $('#hideDiv').hide();
+    });
+
+   function getPositionInPixel(xInsvg,yInsvg)
+   {
+    var svg = document.getElementsByTagName('svg');
+	const rect = svg[0].getBoundingClientRect();
+    const clientX = xInsvg/100 * rect.width + rect.left;
+    const clientY = yInsvg/100 * rect.height + rect.top;
+    return [
+      clientX,
+      clientY,
+    ];
+   }
+
+    function showAnnoInfo(bShow,anno)
+    {
+    $(".anotationInfo").hide();
+    if(bShow)
+    {
+    //var client = getPositionInPixel(100,0)
+    //$(".anotationInfo").css({"top": client[1]+"px" ,"left":client[0]+"px"});
+
+    $(".annoTitle").text(anno.title);
+    $(".annoContent").text(anno.content);
+    $(".annoTypes").text("类型：" + anno.tumorTypesDes.join(";"));
+    $(".createdBy").text("添加：" + anno.createdBy);
+    $(".lastModifiedBy").text("修改：" + anno.lastModifiedBy);
+    $(".deleteAno").attr("disabled", !anno.editable);
+    $(".anotationInfo").show();
+    }
+    }
+
+    $(".cancelAct").click(function(){
+    $(".anotationInfo").hide();
+    viewer.HandleAnnotation({type:"setSelectedIndex",
+    index:-1});
+    });
+   $(".deleteAno").click(function(){
+   $(".anotationInfo").hide();
+   viewer.HandleAnnotation({type:"deleteCurrentSelected"});
+   });
+
+    function initial_annotations() {
+        viewer.setAnnotations({{annotations|tojson }},'{{user.username}}',save_annotations,popUpAnotationWindow,showAnnoInfo);
+    }
+
+
+
+// $(".detection").one("click",function (){
+
+//        var data = {'imageid':'{{image_name}}',
+//                     'username': '{{user.username}}',
+//                     'detectionType':'classical'};
+
+//         $.ajax({
+//                 type: 'POST',
+//                 url: "/detection",
+//                 data: JSON.stringify(data),
+//                 contentType: 'application/json; charset=UTF-8',
+//                 success: function(msg) {
+//                     if(msg != 'detecting')
+//                     {
+//                         getDetectionResult();
+
+//                     }else{
+//                         oTimer = setInterval("getDetectionResult()",10000);
+//                         $(".detection").attr('value',"Detecting");
+//                         $(".detection").css('color','green');
+//                     }
+
+//                 },
+//                 error: function(xhr, type) {
+//                 }
+//         });
+// });
+
+slideTimer = setInterval("updateSlideActive()",300000);
+
+});
+
+var oTimer =null;
+function getDetectionResult()
+{
+    $.ajax({
+            type: 'GET',
+            url:'/' + '{{image_name}}'+'_detection/classical/' +'{{user.username}}',
+            data: '',
+            success: function(request) {
+                    if(request != '')
+                    {
+                                 window.clearInterval(oTimer);
+                                 $(".detection").hide();
+                                 $(".resultImg").attr('src',"data:image/jpg;base64," + request);
+                                 $(".resultImg").show();
+                                 }
+
+                                 },
+            error: function(xhr, type) {
+                        }
+    });
+}
+
+var slideTimer = null;
+function updateSlideActive()
+{
+    $.ajax({
+            type: 'GET',
+            url:'/slide_active/' + '{{image_name}}',
+            data: '',
+            success: function(request) {
+
+                                 },
+            error: function(xhr, type) {
+                        }
+    });
+}
+</script>
+</div>
+  </body>
+</html>

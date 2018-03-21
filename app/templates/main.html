@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="search-title">
+    <form action="" method="post" name="searchForm">
+        {{form.hidden_tag()}}
+        <!--<div class ="radio radio-gender div-inline">
+            <label>
+                <input type="radio" name="gender" value="1">
+                男
+            </label>
+            <label>
+                <input type="radio" name="gender" value="2">
+                女
+            </label>
+            <label>
+                <input type="radio" name="gender" value="0" checked>
+                全部
+            </label>
+        </div>
+        <div class="form-group div-inline">
+            <label>年龄</label>
+            <input type="number" class="form-control form-control-age form-control-primary"
+                   name="agef" min="0" max="120" step="1" value>
+        </div>
+        <div class="form-group div-inline">
+            <label>岁至</label>
+            <input type="number" class="form-control form-control-age form-control-primary"
+                   name="aget" min="0" max="120" step="1" value>
+            <label>岁</label>
+        </div>
+        -->
+        <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+            <td id="search-title-keyword"  >
+                {{ form.searchtext(class="form-control",placeholder="输入关键字") }}
+            </td>
+            <td id="search-title-submit">
+                    <button class="btn btn-primary" type="submit">搜索</button>
+            </td>
+            <td><div>
+                <a href="/main" class="btn btn-primary btn-all">全部切片</a>
+                </div>
+            </td>
+            </tr>
+            </table>
+    </form>
+</div>
+<div class="col-xs-54" id="clSearchResults">
+    <div class="cc-thumb-view">
+        <div class="row">
+            {% for image in searchresults %}
+                <div class="col-xs-4" data-diagopt="0">
+                    <a class="thumbnail cc-thumb-item" href="{{ url_for('image', filename=image.filename) }}" target="_blank">
+                        <div class="hover-to-enlarge cc-thumb-left">
+                            <img src="{{ url_for('static', filename='thumbnail/' + image.filename + '_thumbnail.jpg') }}">
+                        </div>
+                        <div class="caption cc-thumb-cation">
+                            <p>
+                                <strong>序号：</strong>
+                                {{ image.imageid }}
+                            </p>
+                            <p class="cc-thumb-caption-position">
+                                <strong>部位：</strong>
+                                {{ image.position }}
+                            </p>
+                            <p class="cc-thumb-caption-desc">{{ image.description }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div align="center">
+    {% for page in pages %}
+        {% if currentpage == page %}
+        <a href="{{url_for('main', page=page)}}" class="disableHref">{{ page }}</a>
+        {%else%}
+        <a href="{{url_for('main', page=page)}}">{{ page }}</a>
+        {%endif%}
+    {% endfor %}
+</div>
+</div>
+{% endblock %}
+
+
+

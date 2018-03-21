@@ -1,0 +1,25 @@
+<html>
+  <head>
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>欢迎来到病理世界</title>
+    <link href="{{url_for('static', filename='css/style.css', _external=True)}}" rel="stylesheet" type="text/css" />
+      <link href="{{url_for('static', filename='css/search.css', _external=True)}}" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class = "top">
+        <ul>
+            <li><a href="/index" class="hover">主页</a></li>
+            <li><a href="#none">新闻动态</a></li>
+            <li><a href="#none">关于我们</a></li>
+            {%if canlogout%}
+            <li>Hi,{{user.username}}!</li>
+            <li><a href="/logout">退出</a></li>
+            {%endif%}
+        </ul>
+    </div>
+    <div class = "main">
+    {% block content %}{% endblock %}
+    </div>
+  <div class="footer"></div>
+  </body>
+</html>

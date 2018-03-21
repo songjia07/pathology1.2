@@ -1,0 +1,83 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>欢迎来到病理世界</title>
+<link href="{{url_for('static', filename='css/style.css', _external=True)}}" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+
+<div class="top">
+  <ul>
+    <li><a href="#none" class="hover">主页</a></li>
+    <li><a href="#none">新闻动态</a></li>
+    <li><a href="#none">关于我们</a></li>
+  </ul>
+</div>
+
+<div class="main">
+  <div class="denglu">
+    <div class="text" style="font-size:16px;">
+      <strong>这里有：</strong><br />
+      xx种癌症。<br />
+      xx个病例<br />
+      xx张图片
+    </div>
+    <div class="dlk">
+      <form action="" method="post" name="login">
+    {{form.hidden_tag()}}
+      <table width="292" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <td height="76" colspan="3"></td>
+        </tr>
+        <tr>
+          <td width="65" style="font-size:14px;">用户名</td>
+          <td colspan="2">{{form.username}}</td>
+          {% for error in form.username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}<br>
+        </tr>
+        <tr>
+          <td height="16" colspan="3"></td>
+        </tr>
+        <tr>
+          <td>密 码</td>
+          <td colspan="2">{{form.password}}</td>
+          {% for error in form.password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}<br>
+        </tr>
+        <tr>
+          <td height="16" colspan="3"></td>
+        </tr>
+        <tr>
+          <td>验证码</td>
+          <td width="100"><input name="textfield" type="text" class="dlinput" style="width:90px;" maxlength="4" /></td>
+          <td width="127"><img src="/static/images/tp05_20140320.png" width="98" height="27" /></td>
+        </tr>
+        <tr>
+          <td height="16" colspan="3"></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td colspan="2"><input type="submit" value="登 录" class="loginbtn" /></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td colspan="2"><table width="224" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td height="24"><a href="#none" class="mm">忘记密码？</a></td>
+              <td align="right"><a href="/register" class="zc" style="font-size:13px;">立即注册</a></td>
+            </tr>
+          </table></td>
+        </tr>
+      </table>
+        </form>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Copyright &copy; 2017 xxx.com All Rights Reserved　版权所有 </div>
+
+</body>
+</html>
